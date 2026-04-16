@@ -42,19 +42,19 @@ Record your findings — you will use them in every template fill.
 1. `cp .github/kit-templates/copilot-instructions.md .github/copilot-instructions.md`
 2. Fill every `{{PLACEHOLDER}}` using your Phase 1 findings:
 
-| Placeholder | Source |
-|---|---|
-| `{{PROJECT_NAME}}` | README / package.json name |
-| `{{PROJECT_DESCRIPTION}}` | README first paragraph |
-| `{{CHECK_COMMAND}}` | package.json `check` or `test` + `lint` scripts |
-| `{{TECH_STACK}}` | Framework + DB + test runner (e.g. "Next.js 16, Prisma, TypeScript, Vitest") |
-| `{{REPO_ROOT_STRUCTURE}}` | Annotated directory tree (2-3 levels) |
-| `{{DOMAIN_CONSTRAINTS}}` | Non-negotiable rules you found: projectId scoping, LLM wrapper, auth pattern, etc. |
-| `{{AUTH_PATTERN}}` | Exact import + function call from codebase |
-| `{{DB_IMPORT_PATTERN}}` | Exact import from codebase |
-| `{{DB_SCOPE_PATTERN}}` | How queries are scoped (tenantId, userId, projectId, etc.) |
-| `{{LOGGER_PATTERN}}` | Exact logger import + usage |
-| `{{STYLE_APPROACH}}` | CSS Modules / Tailwind / etc. with exact usage example |
+| Placeholder               | Source                                                                             |
+| ------------------------- | ---------------------------------------------------------------------------------- |
+| `{{PROJECT_NAME}}`        | README / package.json name                                                         |
+| `{{PROJECT_DESCRIPTION}}` | README first paragraph                                                             |
+| `{{CHECK_COMMAND}}`       | package.json `check` or `test` + `lint` scripts                                    |
+| `{{TECH_STACK}}`          | Framework + DB + test runner (e.g. "Next.js 16, Prisma, TypeScript, Vitest")       |
+| `{{REPO_ROOT_STRUCTURE}}` | Annotated directory tree (2-3 levels)                                              |
+| `{{DOMAIN_CONSTRAINTS}}`  | Non-negotiable rules you found: projectId scoping, LLM wrapper, auth pattern, etc. |
+| `{{AUTH_PATTERN}}`        | Exact import + function call from codebase                                         |
+| `{{DB_IMPORT_PATTERN}}`   | Exact import from codebase                                                         |
+| `{{DB_SCOPE_PATTERN}}`    | How queries are scoped (tenantId, userId, projectId, etc.)                         |
+| `{{LOGGER_PATTERN}}`      | Exact logger import + usage                                                        |
+| `{{STYLE_APPROACH}}`      | CSS Modules / Tailwind / etc. with exact usage example                             |
 
 If a placeholder has no answer (feature doesn't exist in this project), remove the line — don't leave `{{...}}` in the file.
 
@@ -71,13 +71,16 @@ For each domain the project has, decide:
 **Option B — Project has specific patterns that enrich a generic skill**: edit the existing kit skill file to add a project-specific section at the bottom. Then uncomment that skill in `.gitattributes` so kit pulls won't overwrite it.
 
 **Option C — Project has a domain that the kit has no skill for** (e.g. `auth`, `database`, `ui`, `api`, `payments`): create a new skill file:
+
 ```bash
 mkdir -p .github/skills/<domain>
 # create .github/skills/<domain>/SKILL.md
 ```
+
 New skill files are yours entirely — kit never touches them, no `.gitattributes` entry needed.
 
 **Minimum skills every project should have:**
+
 - `project/SKILL.md` — tech stack, commands, folder layout, key conventions (from `kit-templates/skills/project/SKILL.md`)
 - `code-standards/SKILL.md` — file naming, import rules, component structure (from `kit-templates/skills/code-standards/SKILL.md`)
 

@@ -6,10 +6,10 @@ How to wire `truu-copilot-kit` into any project via `git subtree`, and how to co
 
 ## Two repo roles
 
-| Role | Who | Subtree direction |
-|---|---|---|
-| **Source** | founder-os | Pushes improvements TO kit |
-| **Consumer** | every other project | Pulls updates FROM kit |
+| Role         | Who                 | Subtree direction          |
+| ------------ | ------------------- | -------------------------- |
+| **Source**   | founder-os          | Pushes improvements TO kit |
+| **Consumer** | every other project | Pulls updates FROM kit     |
 
 **Founder-os** has enriched versions of the 5 generic skills and protects them via `.gitattributes merge=ours`. It CAN pull kit updates — prompts, agents, and `copilot-recursive-template.md` update freely. Only skills are blocked.
 
@@ -40,6 +40,7 @@ Use the instructions in .github/kit-templates/setup-project.prompt.md to set up 
 ```
 
 The agent will:
+
 1. Explore your codebase — tech stack, auth, DB, logging, CSS, folder structure
 2. Fill `copilot-instructions.md` from the template with real project values
 3. Decide which generic skills to enrich (project-specific additions) vs. leave as-is
@@ -67,23 +68,23 @@ git subtree pull --prefix=.github truu-kit main --squash
 
 ## What the kit manages vs. what you own
 
-| Path | Owned by |
-|---|---|
-| `.github/skills/architecture/` | Kit (until you enrich it → then yours) |
-| `.github/skills/context-engineering/` | Kit (until you enrich it → then yours) |
-| `.github/skills/debugging/` | Kit (until you enrich it → then yours) |
-| `.github/skills/security/` | Kit (until you enrich it → then yours) |
-| `.github/skills/testing/` | Kit (until you enrich it → then yours) |
-| `.github/prompts/` (all 16) | Kit — always updates |
-| `.github/agents/architect.agent.md` | Kit — always updates |
-| `.github/agents/security-auditor.agent.md` | Kit — always updates |
-| `.github/copilot-recursive-template.md` | Kit — always updates |
-| `.github/kit-templates/` | Kit — reference templates |
-| `.github/copilot-instructions.md` | **You** — never in kit |
-| `.github/skills/project/` | **You** — never in kit |
-| `.github/skills/<domain-specific>/` | **You** — never in kit |
-| `.github/agents/<project>-dev.agent.md` | **You** — never in kit |
-| `tasks/` | **You** — never in kit |
+| Path                                       | Owned by                               |
+| ------------------------------------------ | -------------------------------------- |
+| `.github/skills/architecture/`             | Kit (until you enrich it → then yours) |
+| `.github/skills/context-engineering/`      | Kit (until you enrich it → then yours) |
+| `.github/skills/debugging/`                | Kit (until you enrich it → then yours) |
+| `.github/skills/security/`                 | Kit (until you enrich it → then yours) |
+| `.github/skills/testing/`                  | Kit (until you enrich it → then yours) |
+| `.github/prompts/` (all 16)                | Kit — always updates                   |
+| `.github/agents/architect.agent.md`        | Kit — always updates                   |
+| `.github/agents/security-auditor.agent.md` | Kit — always updates                   |
+| `.github/copilot-recursive-template.md`    | Kit — always updates                   |
+| `.github/kit-templates/`                   | Kit — reference templates              |
+| `.github/copilot-instructions.md`          | **You** — never in kit                 |
+| `.github/skills/project/`                  | **You** — never in kit                 |
+| `.github/skills/<domain-specific>/`        | **You** — never in kit                 |
+| `.github/agents/<project>-dev.agent.md`    | **You** — never in kit                 |
+| `tasks/`                                   | **You** — never in kit                 |
 
 ---
 
