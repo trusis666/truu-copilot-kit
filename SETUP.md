@@ -11,70 +11,44 @@ How to wire `truu-copilot-kit` into any project via `git subtree`, and how to co
 | **Source** | founder-os | Pushes improvements TO kit |
 | **Consumer** | every other project | Pulls updates FROM kit |
 
-**Founder-os is the source.** It has enriched versions of the generic skills and does NOT pull from the kit — it pushes to it. `git subtree pull` in founder-os is deliberately avoided.
+**Founder-os** has enriched versions of the 5 generic skills and protects them via `.gitattributes merge=ours`. It CAN pull kit updates — prompts, agents, and `copilot-recursive-template.md` update freely. Only skills are blocked.
 
 ---
 
 ## New project: pull from kit
 
-### 1. Add the subtree
+### Step 1 — Add the subtree (manual, 30 seconds)
 
 ```bash
-git remote add truu-kit https://github.com/trusis/truu-copilot-kit
+git remote add truu-kit https://github.com/trusis666/truu-copilot-kit
 git subtree add --prefix=.github truu-kit main --squash
+git config --global merge.ours.driver true   # once per machine
 ```
 
-### 2. Register the ours merge driver (one-time, per machine)
+### Step 2 — Run the setup agent (everything else is automated)
 
-```bash
-git config --global merge.ours.driver true
+Open GitHub Copilot Chat, switch to **Agent** mode, and run:
+
+```
+/setup-project
 ```
 
-Required for `.gitattributes` protection to work on future pulls.
+Or attach the prompt manually:
 
-### 3. Add .gitattributes to protect enriched skills
-
-```bash
-cp .github/kit-templates/gitattributes .gitattributes
+```
+Use the instructions in .github/kit-templates/setup-project.prompt.md to set up this project.
 ```
 
-Edit it to protect any paths you've enriched with project-specific content.
+The agent will:
+1. Explore your codebase — tech stack, auth, DB, logging, CSS, folder structure
+2. Fill `copilot-instructions.md` from the template with real project values
+3. Decide which generic skills to enrich (project-specific additions) vs. leave as-is
+4. Create project-specific skills for domains the kit doesn't cover (auth, database, UI, etc.)
+5. Uncomment `.gitattributes` protection only for skills it has enriched
+6. Create your dev agent and task tracking files
+7. Verify no `{{placeholders}}` remain and commit everything
 
-### 4. Copy and fill in the project-specific templates
-
-```bash
-cp .github/kit-templates/copilot-instructions.md .github/copilot-instructions.md
-mkdir -p .github/skills/project && cp .github/kit-templates/skills/project/SKILL.md .github/skills/project/SKILL.md
-mkdir -p .github/skills/code-standards && cp .github/kit-templates/skills/code-standards/SKILL.md .github/skills/code-standards/SKILL.md
-cp .github/kit-templates/agents/dev.agent.md .github/agents/<yourproject>-dev.agent.md
-mkdir -p tasks && cp .github/kit-templates/tasks/* tasks/
-```
-
-### 5. Fill in all placeholders
-
-```bash
-grep -r "{{" .github/ tasks/ --include="*.md" -l
-```
-
-| Placeholder | Replace with |
-|---|---|
-| `{{PROJECT_NAME}}` | Your project name |
-| `{{CHECK_COMMAND}}` | Build + test + lint command (e.g. `npm run check`) |
-| `{{TECH_STACK}}` | Short description (e.g. "Next.js 15, Prisma, TypeScript, Vitest") |
-| `{{REPO_ROOT_STRUCTURE}}` | Your folder layout |
-| `{{DOMAIN_CONSTRAINTS}}` | Project-specific non-negotiable rules |
-| `{{AUTH_PATTERN}}` | How API routes authenticate |
-| `{{DB_IMPORT_PATTERN}}` | How to import the DB client |
-| `{{DB_SCOPE_PATTERN}}` | How to scope queries (tenant/user) |
-| `{{LOGGER_PATTERN}}` | Project logger |
-| `{{STYLE_APPROACH}}` | CSS Modules / Tailwind / etc. |
-
-### 6. Commit
-
-```bash
-git add .github/ tasks/ .gitattributes
-git commit -m "chore: add truu-copilot-kit via subtree"
-```
+> The agent reads the full prompt from `kit-templates/setup-project.prompt.md`. That file is the source of truth for the setup workflow — read it if you want to understand or customize the steps.
 
 ---
 
@@ -84,9 +58,10 @@ git commit -m "chore: add truu-copilot-kit via subtree"
 git subtree pull --prefix=.github truu-kit main --squash
 ```
 
-- Files in `.gitattributes` with `merge=ours` → always kept unchanged
-- Prompts, generic agents, `copilot-recursive-template.md` → update from kit
-- `copilot-instructions.md`, project skills, your dev agent → NOT in kit, never touched
+- **Skills you've enriched** (listed in `.gitattributes` with `merge=ours`) → kept unchanged
+- **Skills you haven't touched** → update from kit
+- **Prompts, generic agents, `copilot-recursive-template.md`** → always update from kit
+- `copilot-instructions.md`, your project skills, your dev agent → not in kit, never touched
 
 ---
 
@@ -94,21 +69,21 @@ git subtree pull --prefix=.github truu-kit main --squash
 
 | Path | Owned by |
 |---|---|
-| `.github/skills/architecture/` | Kit |
-| `.github/skills/context-engineering/` | Kit |
-| `.github/skills/debugging/` | Kit |
-| `.github/skills/security/` | Kit |
-| `.github/skills/testing/` | Kit |
-| `.github/prompts/` (all 16) | Kit |
-| `.github/agents/architect.agent.md` | Kit |
-| `.github/agents/security-auditor.agent.md` | Kit |
-| `.github/copilot-recursive-template.md` | Kit |
-| `.github/kit-templates/` | Kit (reference templates) |
-| `.github/copilot-instructions.md` | **You** |
-| `.github/skills/project/` | **You** |
-| `.github/skills/<domain-specific>/` | **You** |
-| `.github/agents/<project>-dev.agent.md` | **You** |
-| `tasks/` | **You** |
+| `.github/skills/architecture/` | Kit (until you enrich it → then yours) |
+| `.github/skills/context-engineering/` | Kit (until you enrich it → then yours) |
+| `.github/skills/debugging/` | Kit (until you enrich it → then yours) |
+| `.github/skills/security/` | Kit (until you enrich it → then yours) |
+| `.github/skills/testing/` | Kit (until you enrich it → then yours) |
+| `.github/prompts/` (all 16) | Kit — always updates |
+| `.github/agents/architect.agent.md` | Kit — always updates |
+| `.github/agents/security-auditor.agent.md` | Kit — always updates |
+| `.github/copilot-recursive-template.md` | Kit — always updates |
+| `.github/kit-templates/` | Kit — reference templates |
+| `.github/copilot-instructions.md` | **You** — never in kit |
+| `.github/skills/project/` | **You** — never in kit |
+| `.github/skills/<domain-specific>/` | **You** — never in kit |
+| `.github/agents/<project>-dev.agent.md` | **You** — never in kit |
+| `tasks/` | **You** — never in kit |
 
 ---
 

@@ -1,11 +1,19 @@
 # truu-copilot-kit merge protection
+
 # Prevents git subtree pull from overwriting files you've enriched with project-specific content.
+
 # Register the driver once per machine: git config --global merge.ours.driver true
 
 # Protect enriched generic skills (uncomment paths you've customised past the kit baseline):
+
 # .github/skills/architecture/SKILL.md merge=ours
+
 # .github/skills/context-engineering/SKILL.md merge=ours
+
 # .github/skills/debugging/SKILL.md merge=ours
+
 # .github/skills/security/SKILL.md merge=ours
+
 # .github/skills/testing/SKILL.md merge=ours
+
 # .github/copilot-recursive-template.md merge=ours
