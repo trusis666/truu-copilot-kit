@@ -1,4 +1,4 @@
-# copilot-workflow-kit
+# truu-copilot-kit
 
 A reusable GitHub Copilot configuration kit: skills, prompts, agents, and workflow templates for VS Code.
 Designed to be pulled into any project via `git subtree` and extended with project-specific overrides.
@@ -34,7 +34,7 @@ See [SETUP.md](SETUP.md) for step-by-step subtree setup and first-use instructio
 
 ```bash
 # Pull latest kit changes into your project
-git subtree pull --prefix=.github https://github.com/<you>/copilot-workflow-kit main --squash
+git subtree pull --prefix=.github https://github.com/trusis/truu-copilot-kit main --squash
 ```
 
 Only files that exist in the kit will be updated. Your project-specific files (project/SKILL.md, copilot-instructions.md, etc.) are untouched.
@@ -44,5 +44,5 @@ Only files that exist in the kit will be updated. Your project-specific files (p
 If you fix a bug or improve a generic skill, you can push it back:
 
 ```bash
-git subtree push --prefix=.github https://github.com/<you>/copilot-workflow-kit main
+git subtree push --prefix=.github https://github.com/trusis/truu-copilot-kit main
 ```

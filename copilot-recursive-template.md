@@ -34,15 +34,15 @@ Write clean, production-quality code following project conventions (see `.github
 
 Brutally review your own output. Score 1-10 on each axis:
 
-| Axis | Question |
-|---|---|
-| **Correctness** | Does it handle all inputs correctly? Edge cases? |
-| **Security** | SQL injection? Auth bypass? Secrets exposed? XSS? |
-| **Performance** | N+1 queries? Unnecessary re-renders? Unbounded loops? |
-| **Maintainability** | Would a new developer understand this in 5 minutes? |
-| **Scalability** | Will this break at 10x data? 100x requests? |
-| **Consistency** | Does it follow project patterns? Or introduce a new style? |
-| **Error handling** | What happens when the network fails? DB is down? External API times out? |
+| Axis                | Question                                                                 |
+| ------------------- | ------------------------------------------------------------------------ |
+| **Correctness**     | Does it handle all inputs correctly? Edge cases?                         |
+| **Security**        | SQL injection? Auth bypass? Secrets exposed? XSS?                        |
+| **Performance**     | N+1 queries? Unnecessary re-renders? Unbounded loops?                    |
+| **Maintainability** | Would a new developer understand this in 5 minutes?                      |
+| **Scalability**     | Will this break at 10x data? 100x requests?                              |
+| **Consistency**     | Does it follow project patterns? Or introduce a new style?               |
+| **Error handling**  | What happens when the network fails? DB is down? External API times out? |
 
 **Overall score** = average of all axes.
 
@@ -78,23 +78,23 @@ Skip this for truly trivial changes (typo fix, config value change).
 
 ## Mode Selection Guide
 
-| Change scope | Loop | Auto-pause? |
-|---|---|---|
-| New module / feature / multi-file | Full 6-phase | Pause after Phase 2 for user approval |
-| Refactor existing code (2+ files) | Full 6-phase | Pause after Phase 2 |
-| Single function / hook / component | Mini 3-phase | No pause — auto mode |
-| Bug fix with clear root cause | Mini 3-phase | No pause — auto mode |
-| Config / env / typo | None | Just do it |
+| Change scope                       | Loop         | Auto-pause?                           |
+| ---------------------------------- | ------------ | ------------------------------------- |
+| New module / feature / multi-file  | Full 6-phase | Pause after Phase 2 for user approval |
+| Refactor existing code (2+ files)  | Full 6-phase | Pause after Phase 2                   |
+| Single function / hook / component | Mini 3-phase | No pause — auto mode                  |
+| Bug fix with clear root cause      | Mini 3-phase | No pause — auto mode                  |
+| Config / env / typo                | None         | Just do it                            |
 
 ---
 
 ## Recursive Patterns Reference
 
-| Pattern | Loop | Application |
-|---|---|---|
-| **PDCA** (Plan-Do-Check-Act) | Plan → Implement → Verify → Record lesson | Every task |
-| **OODA** (Observe-Orient-Decide-Act) | Read context → Understand state → Choose approach → Execute | Session start |
-| **Generate-Critique-Refine** | LLM output → self-score → iterate | Agent code quality |
-| **TDD feedback** | Write expectation → implement → verify → adjust | Verification step |
+| Pattern                              | Loop                                                        | Application        |
+| ------------------------------------ | ----------------------------------------------------------- | ------------------ |
+| **PDCA** (Plan-Do-Check-Act)         | Plan → Implement → Verify → Record lesson                   | Every task         |
+| **OODA** (Observe-Orient-Decide-Act) | Read context → Understand state → Choose approach → Execute | Session start      |
+| **Generate-Critique-Refine**         | LLM output → self-score → iterate                           | Agent code quality |
+| **TDD feedback**                     | Write expectation → implement → verify → adjust             | Verification step  |
 
 The key insight: **persistence creates real recursion**. Without saving lessons (`tasks/lessons.md`), decisions (memory), and context, each session starts from zero. The recursive loop only works if the Reflect step writes to durable storage.

@@ -91,24 +91,24 @@ Resolve any merge conflicts (rare — only happens if you edited files that exis
 
 ## What the kit manages vs. what you own
 
-| Path | Owned by |
-|---|---|
-| `.github/skills/architecture/` | Kit — `git subtree pull` updates this |
-| `.github/skills/context-engineering/` | Kit |
-| `.github/skills/debugging/` | Kit |
-| `.github/skills/security/` | Kit |
-| `.github/skills/testing/` | Kit |
-| `.github/prompts/` (all) | Kit |
-| `.github/agents/architect.agent.md` | Kit |
-| `.github/agents/security-auditor.agent.md` | Kit |
-| `.github/copilot-recursive-template.md` | Kit |
-| `.github/kit-templates/` | Kit (reference templates, safe to edit copies) |
-| `.github/copilot-instructions.md` | **You** — project-specific |
-| `.github/skills/project/` | **You** — project-specific |
-| `.github/skills/code-standards/` | **You** — project-specific |
-| `.github/skills/<any other>/` | **You** — project-specific |
-| `.github/agents/<project>-dev.agent.md` | **You** — project-specific |
-| `tasks/` | **You** — project-specific |
+| Path                                       | Owned by                                       |
+| ------------------------------------------ | ---------------------------------------------- |
+| `.github/skills/architecture/`             | Kit — `git subtree pull` updates this          |
+| `.github/skills/context-engineering/`      | Kit                                            |
+| `.github/skills/debugging/`                | Kit                                            |
+| `.github/skills/security/`                 | Kit                                            |
+| `.github/skills/testing/`                  | Kit                                            |
+| `.github/prompts/` (all)                   | Kit                                            |
+| `.github/agents/architect.agent.md`        | Kit                                            |
+| `.github/agents/security-auditor.agent.md` | Kit                                            |
+| `.github/copilot-recursive-template.md`    | Kit                                            |
+| `.github/kit-templates/`                   | Kit (reference templates, safe to edit copies) |
+| `.github/copilot-instructions.md`          | **You** — project-specific                     |
+| `.github/skills/project/`                  | **You** — project-specific                     |
+| `.github/skills/code-standards/`           | **You** — project-specific                     |
+| `.github/skills/<any other>/`              | **You** — project-specific                     |
+| `.github/agents/<project>-dev.agent.md`    | **You** — project-specific                     |
+| `tasks/`                                   | **You** — project-specific                     |
 
 ---
 

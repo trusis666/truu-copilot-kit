@@ -7,6 +7,7 @@ Grouped rules for 30-second session-start scan. Kept in sync with `lessons.md` v
 ## Testing
 
 <!-- Rules about test setup, mocks, co-location, gotchas -->
+
 - Co-locate every `.test.ts` next to its source file — no `__tests__/` dirs
 - Use `vi.clearAllMocks()` in `beforeEach` — not `resetAllMocks()` (which strips implementations)
 - To mock a module, use `vi.mock()` at the top level — not inside `it()` blocks (hoisting issue)
@@ -16,6 +17,7 @@ Grouped rules for 30-second session-start scan. Kept in sync with `lessons.md` v
 ## Security
 
 <!-- Rules about auth, SSRF, injection, data scoping -->
+
 - Every API route calls the auth check FIRST — no code runs before identity is verified
 - Every DB query includes tenant/user scope — never a bare `findFirst({ where: { id } })`
 - User-controlled text in LLM prompts must be wrapped in delimiters
@@ -26,6 +28,7 @@ Grouped rules for 30-second session-start scan. Kept in sync with `lessons.md` v
 ## Database
 
 <!-- Rules about queries, migrations, schema changes -->
+
 - After `prisma generate`: clear build cache and restart TS server to avoid stale type errors
 
 ---
@@ -33,6 +36,7 @@ Grouped rules for 30-second session-start scan. Kept in sync with `lessons.md` v
 ## Architecture
 
 <!-- Rules about decision docs, invariants, layer boundaries -->
+
 - Write the ADR BEFORE touching code if the change affects > 2 layers
 - Decision doc status lifecycle: Draft → Accepted → Implemented
 
@@ -41,6 +45,7 @@ Grouped rules for 30-second session-start scan. Kept in sync with `lessons.md` v
 ## General
 
 <!-- Catch-all for rules that don't fit a domain -->
+
 - Run `{{CHECK_COMMAND}}` after every non-trivial change — not just at the end
 - Never auto-commit — the user reviews and commits
 
