@@ -1,64 +1,61 @@
 # Setup Guide
 
-How to wire `copilot-workflow-kit` into a new or existing repo via `git subtree`.
+How to wire `truu-copilot-kit` into any project via `git subtree`, and how to contribute improvements back.
 
 ---
 
-## Important: the "source" repo pattern
+## Two repo roles
 
-If your project is the **source** the kit was extracted from (i.e. you built the kit FROM this project), do NOT run `git subtree add` on it — you'd be pulling a diluted version back into a more complete one. Those repos should keep their current `.github/` as-is and simply maintain the kit by pushing improvements outward.
+| Role | Who | Subtree direction |
+|---|---|---|
+| **Source** | founder-os | Pushes improvements TO kit |
+| **Consumer** | every other project | Pulls updates FROM kit |
 
-Use `git subtree add` only for **new projects** or **projects with a minimal starting `.github/`**.
+**Founder-os is the source.** It has enriched versions of the generic skills and does NOT pull from the kit — it pushes to it. `git subtree pull` in founder-os is deliberately avoided.
 
 ---
 
-## Initial Setup (first time in a new repo)
+## New project: pull from kit
 
 ### 1. Add the subtree
 
 ```bash
-# Run from your repo root
-git subtree add --prefix=.github https://github.com/<you>/copilot-workflow-kit main --squash
+git remote add truu-kit https://github.com/trusis/truu-copilot-kit
+git subtree add --prefix=.github truu-kit main --squash
 ```
 
-This pulls all kit files into `.github/`. Your existing `.github/` files (if any) are merged.
-
-### 2. Copy and fill in the project-specific templates
-
-These files are in `kit-templates/` — they were pulled in by the subtree but are just starters.
-Copy each one to its final location and replace all `{{PLACEHOLDER}}` values:
+### 2. Register the ours merge driver (one-time, per machine)
 
 ```bash
-# Project-specific copilot instructions (MANDATORY)
-cp .github/kit-templates/copilot-instructions.md .github/copilot-instructions.md
-
-# Project skill — describes your stack, commands, conventions
-mkdir -p .github/skills/project
-cp .github/kit-templates/skills/project/SKILL.md .github/skills/project/SKILL.md
-
-# Code standards skill — naming, structure, import rules for your project
-mkdir -p .github/skills/code-standards
-cp .github/kit-templates/skills/code-standards/SKILL.md .github/skills/code-standards/SKILL.md
-
-# Dev agent — project-specific Copilot agent mode
-cp .github/kit-templates/agents/dev.agent.md .github/agents/<yourproject>-dev.agent.md
-
-# Task tracking files (lessons, todo, maintenance)
-mkdir -p tasks
-cp .github/kit-templates/tasks/lessons.md tasks/lessons.md
-cp .github/kit-templates/tasks/lessons-quick-ref.md tasks/lessons-quick-ref.md
-cp .github/kit-templates/tasks/todo.md tasks/todo.md
+git config --global merge.ours.driver true
 ```
 
-### 3. Fill in all placeholders
+Required for `.gitattributes` protection to work on future pulls.
 
-Run this to find everything that needs your attention:
+### 3. Add .gitattributes to protect enriched skills
+
+```bash
+cp .github/kit-templates/gitattributes .gitattributes
+```
+
+Edit it to protect any paths you've enriched with project-specific content.
+
+### 4. Copy and fill in the project-specific templates
+
+```bash
+cp .github/kit-templates/copilot-instructions.md .github/copilot-instructions.md
+mkdir -p .github/skills/project && cp .github/kit-templates/skills/project/SKILL.md .github/skills/project/SKILL.md
+mkdir -p .github/skills/code-standards && cp .github/kit-templates/skills/code-standards/SKILL.md .github/skills/code-standards/SKILL.md
+cp .github/kit-templates/agents/dev.agent.md .github/agents/<yourproject>-dev.agent.md
+mkdir -p tasks && cp .github/kit-templates/tasks/* tasks/
+```
+
+### 5. Fill in all placeholders
 
 ```bash
 grep -r "{{" .github/ tasks/ --include="*.md" -l
 ```
 
-Replace:
 | Placeholder | Replace with |
 |---|---|
 | `{{PROJECT_NAME}}` | Your project name |
@@ -67,55 +64,65 @@ Replace:
 | `{{REPO_ROOT_STRUCTURE}}` | Your folder layout |
 | `{{DOMAIN_CONSTRAINTS}}` | Project-specific non-negotiable rules |
 | `{{AUTH_PATTERN}}` | How API routes authenticate |
-| `{{DB_PATTERN}}` | How DB access works |
-| `{{STYLE_PATTERN}}` | CSS/styling approach |
+| `{{DB_IMPORT_PATTERN}}` | How to import the DB client |
+| `{{DB_SCOPE_PATTERN}}` | How to scope queries (tenant/user) |
+| `{{LOGGER_PATTERN}}` | Project logger |
+| `{{STYLE_APPROACH}}` | CSS Modules / Tailwind / etc. |
 
-### 4. Commit the result
+### 6. Commit
 
 ```bash
-git add .github/ tasks/
-git commit -m "chore: add copilot-workflow-kit via subtree"
+git add .github/ tasks/ .gitattributes
+git commit -m "chore: add truu-copilot-kit via subtree"
 ```
 
 ---
 
-## Updating an existing project
+## Pulling kit updates (consumer projects)
 
 ```bash
-git subtree pull --prefix=.github https://github.com/<you>/copilot-workflow-kit main --squash
+git subtree pull --prefix=.github truu-kit main --squash
 ```
 
-Resolve any merge conflicts (rare — only happens if you edited files that exist in the kit).
+- Files in `.gitattributes` with `merge=ours` → always kept unchanged
+- Prompts, generic agents, `copilot-recursive-template.md` → update from kit
+- `copilot-instructions.md`, project skills, your dev agent → NOT in kit, never touched
 
 ---
 
 ## What the kit manages vs. what you own
 
-| Path                                       | Owned by                                       |
-| ------------------------------------------ | ---------------------------------------------- |
-| `.github/skills/architecture/`             | Kit — `git subtree pull` updates this          |
-| `.github/skills/context-engineering/`      | Kit                                            |
-| `.github/skills/debugging/`                | Kit                                            |
-| `.github/skills/security/`                 | Kit                                            |
-| `.github/skills/testing/`                  | Kit                                            |
-| `.github/prompts/` (all)                   | Kit                                            |
-| `.github/agents/architect.agent.md`        | Kit                                            |
-| `.github/agents/security-auditor.agent.md` | Kit                                            |
-| `.github/copilot-recursive-template.md`    | Kit                                            |
-| `.github/kit-templates/`                   | Kit (reference templates, safe to edit copies) |
-| `.github/copilot-instructions.md`          | **You** — project-specific                     |
-| `.github/skills/project/`                  | **You** — project-specific                     |
-| `.github/skills/code-standards/`           | **You** — project-specific                     |
-| `.github/skills/<any other>/`              | **You** — project-specific                     |
-| `.github/agents/<project>-dev.agent.md`    | **You** — project-specific                     |
-| `tasks/`                                   | **You** — project-specific                     |
+| Path | Owned by |
+|---|---|
+| `.github/skills/architecture/` | Kit |
+| `.github/skills/context-engineering/` | Kit |
+| `.github/skills/debugging/` | Kit |
+| `.github/skills/security/` | Kit |
+| `.github/skills/testing/` | Kit |
+| `.github/prompts/` (all 16) | Kit |
+| `.github/agents/architect.agent.md` | Kit |
+| `.github/agents/security-auditor.agent.md` | Kit |
+| `.github/copilot-recursive-template.md` | Kit |
+| `.github/kit-templates/` | Kit (reference templates) |
+| `.github/copilot-instructions.md` | **You** |
+| `.github/skills/project/` | **You** |
+| `.github/skills/<domain-specific>/` | **You** |
+| `.github/agents/<project>-dev.agent.md` | **You** |
+| `tasks/` | **You** |
 
 ---
 
-## Adding a remote alias (optional, easier pulls)
+## Pushing improvements back to kit
+
+When you improve a generic skill or prompt, contribute it back directly in the kit repo:
 
 ```bash
-git remote add copilot-kit https://github.com/<you>/copilot-workflow-kit
-# Then:
-git subtree pull --prefix=.github copilot-kit main --squash
+cd /path/to/truu-copilot-kit
+# edit the file
+git add -A && git commit -m "improve: <what changed>"
+git push origin main
+# then pull it into your project:
+git subtree pull --prefix=.github truu-kit main --squash
 ```
+
+**Do NOT use `git subtree push --prefix=.github truu-kit main` from a project repo** — it pushes EVERYTHING in `.github/` including project-specific files.
