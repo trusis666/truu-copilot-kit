@@ -4,7 +4,15 @@ How to wire `copilot-workflow-kit` into a new or existing repo via `git subtree`
 
 ---
 
-## Initial Setup (first time in a repo)
+## Important: the "source" repo pattern
+
+If your project is the **source** the kit was extracted from (i.e. you built the kit FROM this project), do NOT run `git subtree add` on it — you'd be pulling a diluted version back into a more complete one. Those repos should keep their current `.github/` as-is and simply maintain the kit by pushing improvements outward.
+
+Use `git subtree add` only for **new projects** or **projects with a minimal starting `.github/`**.
+
+---
+
+## Initial Setup (first time in a new repo)
 
 ### 1. Add the subtree
 
